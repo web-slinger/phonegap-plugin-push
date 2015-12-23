@@ -197,7 +197,7 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
         String message = extras.getString(MESSAGE);
         String title = extras.getString(TITLE);
         String contentAvailable = extras.getString(CONTENT_AVAILABLE);
-        Boolean importantContent = extras.getBoolean(IMPORTANT_CONTENT,false);
+        boolean importantContent = extras.getBoolean(IMPORTANT_CONTENT,false);
 
         Log.d(LOG_TAG, "message =[" + message + "]");
         Log.d(LOG_TAG, "title =[" + title + "]");
@@ -222,10 +222,17 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
         String appName = getAppName(this);
         String packageName = context.getPackageName();
         Resources resources = context.getResources();
+        boolean importantContent = extras.getBoolean(IMPORTANT_CONTENT,false);
 
         int notId = parseInt(NOT_ID, extras);
         Intent notificationIntent = new Intent(this, PushHandlerActivity.class);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        
+        if(importantContent){
+            notificationIntent.addFlags(Notification.FLAG_ONGOING_EVENT);
+		    notificationIntent.addFlags(Notification.FLAG_NO_CLEAR);
+        }
+        
         notificationIntent.putExtra(PUSH_BUNDLE, extras);
         notificationIntent.putExtra(NOT_ID, notId);
 
