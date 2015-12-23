@@ -197,6 +197,7 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
         String message = extras.getString(MESSAGE);
         String title = extras.getString(TITLE);
         String contentAvailable = extras.getString(CONTENT_AVAILABLE);
+        Boolean importantContent = extras.getBoolean(IMPORTANT_CONTENT,false);
 
         Log.d(LOG_TAG, "message =[" + message + "]");
         Log.d(LOG_TAG, "title =[" + title + "]");
@@ -237,8 +238,9 @@ public class GCMIntentService extends GcmListenerService implements PushConstant
                         .setContentTitle(extras.getString(TITLE))
                         .setTicker(extras.getString(TITLE))
                         .setContentIntent(contentIntent)
-                        .setAutoCancel(true);
-
+                        .setAutoCancel(true)
+                        .setOngoing(importantContent);
+        
         SharedPreferences prefs = context.getSharedPreferences(PushPlugin.COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
         String localIcon = prefs.getString(ICON, null);
         String localIconColor = prefs.getString(ICON_COLOR, null);
